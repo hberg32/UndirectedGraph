@@ -10,12 +10,12 @@ public class LinedGraph implements UndirectedGraph {
     }
 
     @Override
-    public boolean add(String[] nodes) {
+    public void add(String[] nodes) {
         //We'll keep node connections in alphabetical order so we don't have to worry about edge direction in the allNodes collection
         String from;
         String to;
         int i = nodes[0].compareTo(nodes[1]);
-        if(i == 0) return false;
+        if(i == 0) return;
         if(i > 0) {
             from = nodes[1].trim();
             to = nodes[0].trim();
@@ -38,7 +38,6 @@ public class LinedGraph implements UndirectedGraph {
         fromNode.addLink(toNode);
         toNode.addLink(fromNode);
 
-        return true;
     }
 
     @Override

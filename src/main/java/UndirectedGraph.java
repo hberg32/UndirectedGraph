@@ -1,4 +1,4 @@
 public interface UndirectedGraph {
-    boolean add(String[] nodes);
+    void add(String[] nodes);
     boolean isConnected(String from, String to);
 }

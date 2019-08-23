@@ -7,14 +7,14 @@ import java.nio.file.Paths;
 public class MainClass {
     private UndirectedGraph ugraph;
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
         if(args.length != 2) {
             throw new RuntimeException("Usage: MainClass city1 city2");
         }
         new MainClass().doTheThing(args);
     }
 
-    public void doTheThing(String[] args) {
+    private void doTheThing(String[] args) {
         ugraph = new LinedGraph();
 
         try {
@@ -23,7 +23,6 @@ public class MainClass {
                 throw new RuntimeException("The input file 'cities.txt' could not be found on the classpath");
             }
             Files.readAllLines(Paths.get(cityFile.toURI()))
-                    .stream()
                     .forEach(line -> ugraph.add(line.split(",")));
         }
         catch (URISyntaxException | IOException e) {
