@@ -17,5 +17,5 @@ dependencies {
 }
 
 application {
-    mainClassName = 'MainClass'
+    mainClassName = 'Spacebus3000'
 }

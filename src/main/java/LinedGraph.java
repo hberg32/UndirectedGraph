@@ -42,9 +42,11 @@ public class LinedGraph implements UndirectedGraph {
 
     @Override
     public boolean isConnected(String from, String to) {
+        if(from == null || to == null) return false;
         Node fromNode = allNodes.get(from);
         Node toNode = allNodes.get(to);
 
+        if(from == to) return true;
         if(fromNode == null || fromNode.getLines().isEmpty()) {
             return false; //From node isn't connected to anything
         }

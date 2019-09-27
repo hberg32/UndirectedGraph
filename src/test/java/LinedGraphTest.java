@@ -7,75 +7,84 @@ public class LinedGraphTest {
     @Test
     public void EmptyGraph() {
         UndirectedGraph ugraph = new LinedGraph();
-        assertThat(ugraph.isConnected("Boston", "Hartford"), equalTo(false));
+        assertThat(ugraph.isConnected("Point-A", "Point-B"), equalTo(false));
     }
 
     @Test
     public void YouCantGetThereFromHere() {
         UndirectedGraph ugraph = new LinedGraph();
-        ugraph.add(new String[]{"Boston", "Hartford"});
+        ugraph.add(new String[]{"Point-A", "Point-B"});
         ugraph.add(new String[]{"MiddleOf", "NoWhere"});
-        assertThat(ugraph.isConnected("Boston", "NoWhere"), equalTo(false));
+        assertThat(ugraph.isConnected("Point-A", "NoWhere"), equalTo(false));
     }
 
     @Test
     public void SingleConnection() {
         UndirectedGraph ugraph = new LinedGraph();
-        ugraph.add(new String[]{"Boston", "Hartford"});
-        assertThat(ugraph.isConnected("Boston", "Hartford"), equalTo(true));
+        ugraph.add(new String[]{"Point-A", "Point-B"});
+        assertThat(ugraph.isConnected("Point-A", "Point-B"), equalTo(true));
+    }
+
+    @Test
+    public void SelfConnection() {
+        UndirectedGraph ugraph = new LinedGraph();
+        ugraph.add(new String[]{"Point-A", "Point-A"});
+        assertThat(ugraph.isConnected("Point-A", "Point-B"), equalTo(false));
+        assertThat(ugraph.isConnected("Point-A", "Point-A"), equalTo(true));
     }
 
     @Test
     public void TransitiveConnection() {
         UndirectedGraph ugraph = new LinedGraph();
-        ugraph.add(new String[]{"Boston", "New York"});
-        ugraph.add(new String[]{"New York", "Philadelphia"});
-        assertThat(ugraph.isConnected("Boston", "Philadelphia"), equalTo(true));
+        ugraph.add(new String[]{"Point-A", "Point-C"});
+        ugraph.add(new String[]{"Point-C", "Point-D"});
+        assertThat(ugraph.isConnected("Point-A", "Point-D"), equalTo(true));
     }
 
     @Test
     public void Loop() {
         UndirectedGraph ugraph = new LinedGraph();
-        ugraph.add(new String[]{"Boston", "New York"});
-        ugraph.add(new String[]{"New York", "Philadelphia"});
-        ugraph.add(new String[]{"New York", "Boston"});
-        assertThat(ugraph.isConnected("Boston", "Philadelphia"), equalTo(true));
+        ugraph.add(new String[]{"Point-A", "Point-C"});
+        ugraph.add(new String[]{"Point-C", "Point-D"});
+        ugraph.add(new String[]{"Point-C", "Point-A"});
+        assertThat(ugraph.isConnected("Point-A", "Point-D"), equalTo(true));
     }
 
     @Test
     public void ParallelRoutes() {
+        //In this test there are multiple routes from the source to the destination
         UndirectedGraph ugraph = new LinedGraph();
-        ugraph.add(new String[]{"Boston", "Hartford"});
-        ugraph.add(new String[]{"New York", "Hartford"});
-        ugraph.add(new String[]{"New Haven", "Boston"});
-        ugraph.add(new String[]{"New Haven", "New York"});
-        assertThat(ugraph.isConnected("Boston", "New York"), equalTo(true));
+        ugraph.add(new String[]{"Point-A", "Point-B"});
+        ugraph.add(new String[]{"Point-C", "Point-B"});
+        ugraph.add(new String[]{"Point-E", "Point-A"});
+        ugraph.add(new String[]{"Point-E", "Point-C"});
+        assertThat(ugraph.isConnected("Point-A", "Point-C"), equalTo(true));
     }
 
     @Test
     public void RailroadMerger() {
         UndirectedGraph ugraph = new LinedGraph();
         //Add nodes for railroad 1
-        ugraph.add(new String[]{"Boston", "New York"});
-        ugraph.add(new String[]{"New York", "Philadelphia"});
-        ugraph.add(new String[]{"New York", "Hartford"});
+        ugraph.add(new String[]{"Point-A", "Point-C"});
+        ugraph.add(new String[]{"Point-C", "Point-D"});
+        ugraph.add(new String[]{"Point-C", "Point-B"});
         //Add nodes for railroad 2
-        ugraph.add(new String[]{"Los Angeles", "San Francisco"});
-        ugraph.add(new String[]{"San Diego", "Los Angeles"});
-        ugraph.add(new String[]{"San Franciso", "Seattle"});
+        ugraph.add(new String[]{"Point-F", "Point-G"});
+        ugraph.add(new String[]{"Point-H", "Point-F"});
+        ugraph.add(new String[]{"Point-G", "Point-I"});
 
         //Add the connecting city to ensure lines are joined
-        assertThat(ugraph.isConnected("Boston", "Los Angeles"), equalTo(false));
-        ugraph.add(new String[]{"San Francisco", "New York"});
-        assertThat(ugraph.isConnected("Boston", "Los Angeles"), equalTo(true));
+        assertThat(ugraph.isConnected("Point-A", "Point-F"), equalTo(false));
+        ugraph.add(new String[]{"Point-G", "Point-C"});
+        assertThat(ugraph.isConnected("Point-A", "Point-F"), equalTo(true));
     }
 
     @Test
     public void StarShapedGraph() {
         UndirectedGraph ugraph = new LinedGraph();
-        ugraph.add(new String[]{"Boston", "New York"});
-        ugraph.add(new String[]{"New York", "Philadelphia"});
-        ugraph.add(new String[]{"New York", "Hartford"});
-        assertThat(ugraph.isConnected("Boston", "Hartford"), equalTo(true));
+        ugraph.add(new String[]{"Point-A", "Point-C"});
+        ugraph.add(new String[]{"Point-C", "Point-D"});
+        ugraph.add(new String[]{"Point-C", "Point-B"});
+        assertThat(ugraph.isConnected("Point-A", "Point-B"), equalTo(true));
     }
 }
